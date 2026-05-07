@@ -1,7 +1,7 @@
 `timescale 1ns / 1ps
 
 module up_down_counter #(
-    parameter int MAX = 2,
+    parameter int MAX   = 2,
     parameter int WIDTH = 2
 ) (
     input logic clk,
@@ -15,8 +15,7 @@ module up_down_counter #(
 
   logic [WIDTH-1:0] next_count;
 
-  always_ff @(posedge clk)
-    if (enable) count <= next_count;
+  always_ff @(posedge clk) if (enable) count <= next_count;
 
   always_comb begin
     if (up) begin
