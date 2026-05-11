@@ -23,7 +23,7 @@ module button_auto_repeat #(
   );
 
     button_hold_detect #(
-        .HOLD_CYCLES(HOLD_CYCLES - REPEAT_CYCLES + 1)  // Subtract REPEAT_CYCLES to ensure first pulse is generated at HOLD_CYCLES
+        .HOLD_CYCLES(HOLD_CYCLES - REPEAT_CYCLES + 1)
     ) u_hold_detect (
         .clk(clk),
         .button(button),
