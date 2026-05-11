@@ -75,15 +75,15 @@ module user_top_watch_v2 #(
       .count(minutes)
   );
 
-  logic [5:0] hours;
+  logic [4:0] hours;
   // hours
   logic hours_tick;
   logic hours_edit;
   logic hours_inc;
   logic hours_dec;
   editable_counter #(
-      .N(60),
-      .WIDTH(6)
+      .N(24),
+      .WIDTH(5)
   ) u_hours (
       .clk(clk),
       .tick(hours_tick),
@@ -119,7 +119,7 @@ module user_top_watch_v2 #(
 
 
   // Zero - extend counter values to display outputs
-  assign hours_disp = {1'b0, hours};
+  assign hours_disp = {2'b0, hours};
   assign minutes_disp = {1'b0, minutes};
   assign seconds_disp = {1'b0, seconds};
 
