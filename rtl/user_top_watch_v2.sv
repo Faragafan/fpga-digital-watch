@@ -16,7 +16,7 @@
 // ------------------------------------------------------------------
 `timescale 1ns / 1ps
 
-module user_top_watch_v1 #(
+module user_top_watch_v2 #(
     /* verilator lint_off UNUSEDPARAM */
     parameter int CYCLES_PER_SECOND = 50_000_000
     /* verilator lint_on UNUSEDPARAM */
@@ -125,10 +125,35 @@ module user_top_watch_v1 #(
 
   // Unused
   assign led = 10'b0;
-  assign blank_hours = 1'b0;
-  assign blank_minutes = 1'b0;
-  assign blank_seconds = 1'b0;
+  assign blank_hours = mode_enable[2] && !pwm_out;
+  assign blank_minutes = mode_enable[1] && !pwm_out;
+  assign blank_seconds = mode_enable[0] && !pwm_out;
+
+  // --------------
+  // Mode Selection
+  // --------------
+  logic [2:0] mode_enable;
+
+  edit_mode_selector #(
+      .HOLD_CYCLES(CYCLES_PER_SECOND)  // Fill in , based on CYCLES_PER_SECOND
+  ) u_mode_selector (
+      .clk(clk),
+      .button(button[3]),
+      .mode_enable(mode_enable)
+  );
 
 
+  logic pwm_out;
 
+  localparam int FLASHPERIODCYCLES = CYCLES_PER_SECOND / 2;
+  localparam int FLASHDUTYCYCLES = (FLASHPERIODCYCLES * 8) / 10;
+
+  pwm_generator #(
+      .PERIOD_CYCLES(FLASHPERIODCYCLES),
+      .DUTY_CYCLES  (FLASHDUTYCYCLES)
+  ) u_flash_pwm (
+      .clk(clk),
+      .rst(1'b0),
+      .pwm_out(pwm_out)
+  );
 endmodule
