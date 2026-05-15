@@ -45,6 +45,7 @@ module user_top_watch_v4 #(
   logic seconds_edit;
   logic seconds_inc;
   logic seconds_dec;
+  logic seconds_timer_run;
   editable_counter #(
       .N(60),
       .WIDTH(6)
@@ -115,8 +116,8 @@ module user_top_watch_v4 #(
   assign hours_inc = inc_pulse;
   assign hours_dec = dec_pulse;
 
-  assign minutes_tick = seconds_tick && (seconds_disp == 7'd59);
-  assign hours_tick = minutes_tick && (minutes_disp == 7'd59);
+  assign minutes_tick = seconds_tick && (seconds == 6'd59);
+  assign hours_tick = minutes_tick && (minutes == 6'd59);
 
 
 
@@ -199,7 +200,6 @@ module user_top_watch_v4 #(
   logic realign_seconds_tick;
 
   assign realign_seconds_tick = (mode_enable_prev == 3'b001) && (mode_enable == 3'b010);
-  logic seconds_timer_run;
   assign seconds_timer_run = !realign_seconds_tick;
 
 endmodule
